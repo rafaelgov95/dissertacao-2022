@@ -1,0 +1,105 @@
+<nav class="sidebar" [ngClass]="{sidebarPushRight: isActive}">
+  <ul class="list-group">
+
+
+    <a [routerLink]="['/home']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+      <i class="fa fa-home"></i>&nbsp;Início
+    </a>
+
+
+    <div class="nested-menu">
+      <a class="list-group-item" (click)="addExpandClass('pages1')" [routerLink]="['/processamento']"
+        [routerLinkActive]="['router-link-active']">
+        <i class="fa fa-wrench"></i>&nbsp;Processamento CNN
+      </a>
+    </div>
+    <!-- <div class="nested-menu">
+      <a class="list-group-item" (click)="addExpandClass('pages2')" [routerLink]="['/pseudo']"
+        [routerLinkActive]="['router-link-active']">
+
+        <i class="fa fa-fw fa-desktop"></i>&nbsp;Pseudo-Coloração
+      </a>
+    </div> -->
+
+    <div *ngIf="currentUser=='rafael'|| currentUser=='milton'">
+    <div class="nested-menu">
+      <a class="list-group-item" (click)="addExpandClass('pages2')" [routerLink]="['/gerenciador']"
+        [routerLinkActive]="['router-link-active']">
+
+        <i class="fa fa-fw fa-desktop"></i>&nbsp;Gerenciador
+      </a>
+    </div>
+  </div>
+    <div class="nested-menu">
+      <a class="list-group-item" (click)="addExpandClass('pages2')" [routerLink]="['/help']"
+        [routerLinkActive]="['router-link-active']">
+
+        <i class="fa fa-fw fa-desktop"></i>&nbsp;Help
+      </a>
+    </div>
+    <!-- <div class="nested-menu">
+          <a class="list-group-item" (click)="addExpandClass('pages2')"  [routerLink]="['/repositorio']" [routerLinkActive]="['router-link-active']">
+
+              <i class="fa fa-fw fa-desktop"></i>&nbsp;Repositório
+          </a>
+          <li class="nested" [class.expand]="showMenu === 'pages2'">
+              <ul class="submenu">
+                  <li>
+                      <a [routerLink]="['/testes']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+                          <i class="fa fa-plus-circle"></i>&nbsp;Teste
+                      </a>
+                  </li>
+
+              </ul>
+          </li>
+          <li class="nested" [class.expand]="showMenu === 'pages2'">
+              <ul class="submenu">
+                  <li>
+                      <a  [routerLinkActive]="['router-link-active']" class="list-group-item">
+                          <i class="fa fa-address-card"></i>&nbsp;Completo
+                      </a>
+                  </li>
+
+              </ul>
+          </li>
+
+      </div> -->
+
+    <!-- <a [routerLink]="['/estagio/folha-de-frequencia']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-calendar"></i>&nbsp;Frequência
+        </a>
+        <a [routerLink]="['/estagio/cronograma']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-industry"></i>&nbsp;Cronograma
+        </a>
+        <a [routerLink]="['/estagio/relatorios']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-tasks"></i>&nbsp;Relatorios
+        </a> -->
+
+  </ul>
+  <div class="quadroavisos">
+    <li>Processamento</li>
+    <ol>
+      <li>Clique em Processamento CNN ou Pseudo-Coloração.</li>
+      <li>Clique em "tipo de diagnóstico" para selecionar o tipo de exame.</li>
+      <li>Clique em "arquivo de entrada" para escolher uma imagem/arquivo para realizar o processamento.</li>
+      <ul>
+        <li>Clique em "teste" caso não possua imagem/arquivo para processar.</li>
+        <li>Clique em "selecionar" para seleciona-la.</li>
+        <li>Pode-se mudar de imagem/arquivo teste clicando em Próxima/Anterior.</li>
+      </ul>
+      <li>Após selecionar uma imagem/arquivo clique em "avaliar".</li>
+    </ol>
+
+
+    <li>Sair</li>
+    <ul>
+      <li>Para sair da plataforma clique em seu nome do lado direito no topo da página.</li>
+    </ul>
+
+    <li>Help</li>
+    <ul>
+      <li>Para mais informações.</li>
+    </ul>
+  </div>
+
+</nav>

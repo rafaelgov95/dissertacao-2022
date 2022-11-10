@@ -1,0 +1,74 @@
+<app-page-header [heading]="'Repositório'" [icon]="'fa-desktop'"></app-page-header>
+
+  <div class="row">
+    <div class="col-sm">
+        <mat-card class='matCard'>
+            <div align="center">
+                <mat-card-title>VFC</mat-card-title>
+            </div>
+            <hr>
+            <mat-card-content>
+
+
+            </mat-card-content>
+            <hr>
+            <mat-card-actions>
+
+            </mat-card-actions>
+
+            <mat-card-footer></mat-card-footer>
+        </mat-card>
+
+    </div>
+
+
+
+
+
+    <div class="col-sm">
+      <mat-card class='matCard'>
+          <div align="center">
+              <mat-card-title>COVID-19</mat-card-title>
+          </div>
+          <hr>
+          <mat-card-content>
+              <div class="exemple-container">
+                  <div class="row"  class="imagePreview">
+
+                    <ngb-carousel>
+                      <ng-template ngbSlide *ngFor="let imagem_covid of imagens_covid_19;index as i;first as isFirst ">
+                        <div class="picsum-img-wrapper">
+                          <div aling="center">
+                            <img mat-card-image class="imagePreview" [src]="imagem_covid[0]"  >
+
+                        </div>                        </div>
+                        <div class="carousel-caption">
+                          <h3>{{imagem_covid[1]}}</h3>
+                          <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p> -->
+                        </div>
+                      </ng-template>
+                    </ngb-carousel>
+                  </div>
+
+
+              </div>
+          </mat-card-content>
+          <hr>
+          <mat-card-actions>
+              <div class="exemmple-container">
+                  <div class="row">
+                      <div class="col-12">
+
+
+
+                      </div>
+
+                  </div>
+              </div>
+          </mat-card-actions>
+
+          <mat-card-footer></mat-card-footer>
+      </mat-card>
+
+  </div>
+</div>

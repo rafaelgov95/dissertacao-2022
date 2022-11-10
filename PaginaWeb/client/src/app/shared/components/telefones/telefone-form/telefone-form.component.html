@@ -1,0 +1,87 @@
+<mat-card>
+  <div class="card-buttons">
+    <button mat-icon-button matTooltip="Diminuir prioridade">
+      <mat-icon aria-label="Diminuir prioridade">keyboard_arrow_down</mat-icon>
+    </button>
+    <button mat-icon-button matTooltip="Aumentar prioridade">
+      <mat-icon aria-label="Aumentar prioridade">keyboard_arrow_up</mat-icon>
+    </button>
+  </div>
+  <div class="row-padding">
+
+    <mat-icon matPrefix>
+      <i class="fa fa-user"></i>
+    </mat-icon>
+    <mat-form-field class="form-group col-md-8">
+      <mat-select placeholder="Telefone" required [formControl]="usoControl" [(ngModel)]="telefone.uso" #tipoTelefone>
+        <mat-option>--</mat-option>
+        <mat-option *ngFor="let uso of usos" [value]="uso">
+          {{uso}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="usoControl.hasError('required')">Selecione uma das opções</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="form-group col-md-3" [floatPlaceholder]="floatPlaceholderValue()" [hidden]="!isRecado()">
+      <input matInput placeholder="Nome do Contato" [(ngModel)]="telefone.contato" [disabled]="!editando">
+    </mat-form-field>
+  </div>
+
+  <div class="row-padding" [hidden]="tipoTelefone.value != 'Ramal UFMS'">
+    <mat-form-field class="form-group col-md-3">
+      <input matInput type="number" required placeholder="Ramal" [(ngModel)]="telefone.ramal" [disabled]="!editando">
+    </mat-form-field>
+  </div>
+
+  <div class="row-padding" [hidden]="tipoTelefone.value == 'Ramal UFMS'">
+    <mat-icon matPrefix [hidden]="isCelular()">phone</mat-icon>
+    <mat-icon matPrefix [hidden]="!isCelular()">smartphone</mat-icon>
+
+    <mat-form-field class="form-group col-md-3" [floatPlaceholder]="floatPlaceholderValue()">
+
+      <input type="tel" required matInput pattern="^(\([0-9]{2}\))\s([9]{1})?([0-9]{4})-([0-9]{4})$" [textMask]="{mask: mask}"
+        placeholder="Número" [(ngModel)]="telefone.numero" [disabled]="!editando">
+    </mat-form-field>
+
+
+    
+
+    <mat-form-field class="form-group col-md-4" [floatPlaceholder]="floatPlaceholderValue()" [hidden]="isCelular()">
+      <input matInput type="number" placeholder="Ramal" [(ngModel)]="telefone.ramal" [disabled]="!editando">
+    </mat-form-field>
+
+    <mat-form-field class="form-group col-md-4" [floatPlaceholder]="floatPlaceholderValue()" [hidden]="!isCelular()">
+      <input matInput type="text" placeholder="Operadora (opcional)" aria-label="Operadora" [formControl]="formControl" [matAutocomplete]="auto"
+        [(ngModel)]="telefone.operadora">
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let operadora of operadorasFiltradas | async" [value]="operadora">
+          <span>{{ operadora }}</span>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <mat-checkbox class="form-group col-md-5" align="end" matSuffix [hidden]="!isCelular()" [(ngModel)]="telefone.isWhatsApp"
+    [disabled]="!editando">
+    <mat-icon>
+      <i class="fa fa-whatsapp"></i>
+    </mat-icon>
+  </mat-checkbox>
+  </div>
+  <mat-card-actions class="card-buttons">
+    <div [hidden]="editando">
+      <button mat-icon-button matTooltip="Editar" (click)="editar()">
+        <mat-icon aria-label="Editar">edit</mat-icon>
+      </button>
+      <button mat-icon-button matTooltip="Excluir">
+        <mat-icon aria-label="Exluir">delete</mat-icon>
+      </button>
+    </div>
+    <div [hidden]="!editando">
+      <button mat-icon-button matTooltip="Salvar" (click)="salvar()">
+        <mat-icon aria-label="Salvar">save</mat-icon>
+      </button>
+      <button mat-icon-button matTooltip="Descartar">
+        <mat-icon aria-label="Descartar">delete</mat-icon>
+      </button>
+    </div>
+  </mat-card-actions>
+</mat-card>

@@ -1,0 +1,12 @@
+<div>
+    <span class="card-buttons btn-group-sm wrapper">
+        <button mat-fab (click)="adicionar()">
+            <mat-icon class="fa fa-user"></mat-icon>
+        </button>
+    </span>
+
+    <div fxLayout="column" fxLayoutGap="20px" *ngIf="telefones">
+
+        <app-telefone-form *ngFor="let telefone of telefones" [telefone]="telefone"></app-telefone-form>
+    </div>
+</div>

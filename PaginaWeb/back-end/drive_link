@@ -1,0 +1,2 @@
+export FLASK_APP=./autoapp.py
+export DATABASE_URL=mongodb://localhost/flask

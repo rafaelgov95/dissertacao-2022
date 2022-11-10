@@ -1,0 +1,48 @@
+// Para que os componentes do material fiquem ocultos ao adicionar a propriedade hidden.
+[hidden] { display: none; }
+
+.card-container {
+    max-width: 200px;
+   
+}
+
+.card-buttons{
+    display: flex;
+    justify-content: flex-end;
+}
+
+div.card-buttons   {
+    display: flex;
+    justify-content: flex-end;
+}
+
+div.w3-row-padding {
+    margin: 0px -20px;
+}
+
+mat-checkbox > mat-icon {
+    padding: 0px 5px 0px 5px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1 1;
+    grid-template-rows: auto auto;
+    grid-gap: 0px 20px;
+    grid-template-areas: 
+        "telefone-area contato-area"
+        "numero-area ramal-operadora-area";
+}
+
+.telefone-area {
+    grid-area: telefone-area;
+}
+.contato-area {
+    grid-area: contato-area;
+}
+.numero-area {
+    grid-area: numero-area;
+}
+.ramal-operadora-area {
+    grid-area: ramal-operadora-area;
+}

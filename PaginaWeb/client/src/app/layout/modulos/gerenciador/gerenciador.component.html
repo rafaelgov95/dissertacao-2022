@@ -1,0 +1,109 @@
+<app-page-header [heading]="'Gerenciador'" [icon]="'fa-desktop'"></app-page-header>
+<mat-tab-group>
+  <mat-tab label="Lista Completa">
+
+
+    <mat-card>
+      <!-- <div class="example-loading-shade"
+  *ngIf="isLoadingResults || isRateLimitReached">
+<mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+<div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+ GitHub's API rate limit has been reached. It will be reset in one minute.
+</div>
+</div> -->
+      <mat-card-title align='center'>Lista de Requisição</mat-card-title>
+      <mat-form-field>
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Digite uma busca" #input>
+      </mat-form-field>
+
+      <div class="example-container mat-elevation-z8">
+
+
+
+        <div class="example-table-container">
+
+          <table mat-table [dataSource]="dataSource" class="example-table" matSort>
+
+            <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="posicao">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
+              <td mat-cell *matCellDef="let element; let i = index;"> {{i+1}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+              <td mat-cell *matCellDef="let element"> <a class="text-capitalize">{{element.name}}</a> </td>
+            </ng-container>
+
+            <!-- <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Total de Requisições </th>
+          <td mat-cell *matCellDef="let element"> <a class="text-capitalize">{{element.name}}</a> </td>
+        </ng-container> -->
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="api">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Processamento </th>
+              <td mat-cell *matCellDef="let element"> {{element.api }} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="data">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Data </th>
+              <td mat-cell *matCellDef="let element"> {{ element.data*1000 | date: 'dd-MM-yyyy h:mm:ss a'}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      </div>
+    </mat-card>
+  </mat-tab>
+  <mat-tab label="Lista de Contador">
+
+
+    <mat-card>
+      <mat-card-title align='center'>Lista de Contagem de Requisição</mat-card-title>
+      <!-- <mat-form-field>
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Digite uma busca" #input>
+      </mat-form-field> -->
+
+      <div class="example-container mat-elevation-z8">
+
+
+
+        <div class="example-table-container">
+
+          <table mat-table [dataSource]="dataSource_cont" class="example-table" matSort>
+
+             <ng-container matColumnDef="posicao">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
+              <td mat-cell *matCellDef="let element; let i = index;"> {{i+1}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+              <td mat-cell *matCellDef="let element"> <a class="text-capitalize">{{element.name}}</a> </td>
+            </ng-container>
+
+            <ng-container matColumnDef="number">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Total de Requisição </th>
+              <td mat-cell *matCellDef="let element"> <a class="text-capitalize">{{element.value}}</a> </td>
+            </ng-container>
+
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns_count"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns_count;"></tr>
+          </table>
+        </div>
+      </div>
+    </mat-card>
+
+  </mat-tab>
+</mat-tab-group>

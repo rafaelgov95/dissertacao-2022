@@ -1,0 +1,228 @@
+<app-page-header [heading]="'Processamento de exames via convolutional neural network (CNN) [EM DESENVOLVIMENTO]'"
+  [icon]="'fa-desktop'"></app-page-header>
+
+
+<ng-template #customLoadingTemplate>
+  <div class="custom-class">
+    <h3>
+      Sua requisição foi encaminhada aguarde......!
+    </h3>
+    <button>
+      Click me!
+    </button>
+  </div>
+</ng-template>
+<mat-card>
+
+  <h4>Como utilizar o módulo Processamento CNN</h4>
+
+  <div>
+    <ol>
+      <li>Clique em "tipo de diagnóstico" para selecionar o tipo de exame.</li>
+      <li>Clique em "arquivo de entrada" para escolher uma imagem/arquivo para realizar o processamento.</li>
+      <ul>
+        <li>Clique em "teste" caso não possua imagem/arquivo para processar.</li>
+        <li>Clique em "selecionar" para seleciona-la.</li>
+        <li>Pode-se mudar de imagem/arquivo teste clicando em Próxima/Anterior.</li>
+      </ul>
+      <li>Após selecionar uma imagem/arquivo clique em "avaliar".</li>
+    </ol>
+  </div>
+</mat-card>
+<hr>
+
+
+
+<div class="loading-container">
+  <div class="loading">
+
+    <ngx-loading [show]="loading_value"
+      [config]="{primaryColour: primaryColour, secondaryColour: secondaryColour, tertiaryColour: primaryColour, backdropBorderRadius: '3px'}"></ngx-loading>
+
+    <mat-card>
+      <mat-card-actions>
+        <div class="exemple-container">
+          <div class="row"  *ngIf="uploadForm.controls['diagnostico'].value.tipo=='Tracking EPI'">
+            <div class="col-sm">
+              <div align="center">
+              <button  mat-raised-button color="warn"
+                (click)="demonstracao=!demonstracao">Visualizar Video de Demonstração </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        </mat-card-actions>
+    </mat-card>
+    <mat-card>
+      <mat-card *ngIf="demonstracao" >
+        <div align="center">
+         <H2>Vídeo de Demonstração do Tracking de Equipamento Individual de Segurança - EPI</H2>
+        </div>
+        <mat-card-content class="demostracao">
+          <iframe src="https://drive.google.com/file/d/153H6yJQmlf6ryFNbyxy8MKo6tO1NFfqH/preview" width="100%" height="100%"></iframe>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <div align="center">
+          <button  mat-raised-button color="primary"
+          (click)="demonstracao=!demonstracao">Voltar Para o Processamento</button>
+        </div>
+        </mat-card-actions>
+      </mat-card>
+
+
+      <form [formGroup]="uploadForm" (ngSubmit)="submit()" *ngIf="!demonstracao">
+        <div class="row">
+          <div class="col-sm">
+            <mat-card class='matCard'>
+              <div align="center">
+                <mat-card-title>Dados de Entrada</mat-card-title>
+              </div>
+              <hr>
+              <mat-card-content>
+                <div class="exemple-container">
+                  <div class="row">
+                    <p> Tipo de processamento:&nbsp;
+
+                      <div *ngIf="uploadForm.controls['diagnostico'].valid">
+                        {{uploadForm.controls['diagnostico'].value.tipo}}</div>
+                  </div>
+
+                  <div class="row">
+
+                    <p>Formatos de entrada:&nbsp;
+                      <div *ngIf="uploadForm.controls['diagnostico'].valid">
+                        <p>{{uploadForm.controls['diagnostico'].value.shape}}
+                      </div>
+                  </div>
+
+                  <div class="row">
+                    <p>Arquivo selecionado:&nbsp;
+                      <div *ngIf="file ">
+                        {{file.name}}
+                      </div>
+                  </div>
+                </div>
+
+                <hr>
+
+                <div class="exemmple-container">
+                  <div class="row">
+                    <div class="col-12">
+                      <div align="center">
+                        <mat-label>Tipo de Diagóstico</mat-label>
+                      </div>
+                      <mat-select formControlName="diagnostico" placeholder="Selecione">
+                        <mat-option (click)='checkFile()' *ngFor="let d of diagnosticos" [value]="d">
+                          {{d.tipo}}
+                        </mat-option>
+                      </mat-select>
+                      <hr>
+                    </div>
+                  </div>
+                </div>
+              </mat-card-content>
+
+            </mat-card>
+          </div>
+
+
+
+
+
+          <div class="col-sm " *ngIf="mostrar_vfc">
+            <mat-card class='matCard'>
+              <div align="center">
+                <mat-card-title>Arquivo VFC {{arquivo_vfc_atual_index}}</mat-card-title>
+
+              </div>
+              <hr>
+              <mat-card-content>
+
+                <textarea name="text" disabled class="imagePreview_VFC" matInput [value]="arquivo_vfc_atual"></textarea>
+              </mat-card-content>
+              <hr>
+              <mat-card-footer>
+
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      <button [disabled]="!uploadForm.controls['diagnostico'].valid" type="button" mat-raised-button
+                        (click)="anterior_vfc()">Anterior</button>
+                    </div>
+                    <div class="col-sm">
+                      <button [disabled]="!uploadForm.controls['diagnostico'].valid" type="button" mat-raised-button
+                        (click)="proximo_vfc()">Próximo</button>
+                    </div>
+                    <div class="col-sm">
+                      <button [disabled]="!uploadForm.controls['diagnostico'].valid" type="button" mat-raised-button
+                        (click)="select_vfc(arquivo_vfc_atual)">Selecionar</button>
+                    </div>
+                  </div>
+                </div>
+              </mat-card-footer>
+            </mat-card>
+
+
+          </div>
+
+
+
+
+
+
+          <div class="col-sm " *ngIf="uploadForm.controls['valido'].value ">
+            <mat-card class='matCard'>
+              <div align="center">
+                <mat-card-title>Preview Dados de Entrada</mat-card-title>
+              </div>
+              <hr>
+
+              <mat-card-content>
+                <div class="exemple-container">
+                  <div aling="center" class="imagePreview" *ngIf="uploadForm.controls['diagnostico'].value.tipo=='VFC'">
+                    <textarea disabled class="imagePreview" matInput
+                      [value]="uploadForm.controls['dados_input'].value"></textarea>
+                  </div>
+                </div>
+              </mat-card-content>
+              <hr>
+              <mat-card-footer>
+              </mat-card-footer>
+            </mat-card>
+          </div>
+
+        </div>
+      </form>
+      <div class="row">
+        <br>
+      </div>
+      <div
+        *ngIf="uploadForm.controls['dados_input'].value !=''&&uploadForm.controls['diagnostico'].value.tipo=='VFC' && show_vfc ">
+        <div class="row">
+          <div class="col-sm">
+            <mat-card class='matCardGrafico'>
+              <plotly-plot [useResizeHandler]="true" [style]="{position: 'relative', width: '100%', height: '100%'}"
+                [data]="graph1.data" [layout]="graph1.layout"></plotly-plot>
+            </mat-card>
+          </div>
+          <div class="col-sm">
+            <mat-card class="matCardGrafico">
+              <plotly-plot [useResizeHandler]="true" [style]="{position: 'relative', width: '100%', height: '100%'}"
+                [data]="graph2.data" [layout]="graph2.layout"></plotly-plot>
+            </mat-card>
+          </div>
+
+
+          <div class="col-sm">
+            <mat-card class='matCardGrafico'>
+              <plotly-plot [useResizeHandler]="true" [style]="{position: 'relative', width: '100%', height: '100%'}"
+                [data]="graph3.data" [layout]="graph3.layout"></plotly-plot>
+            </mat-card>
+          </div>
+
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>

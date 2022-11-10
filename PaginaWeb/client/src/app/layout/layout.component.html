@@ -1,0 +1,8 @@
+<app-header></app-header>
+<app-sidebar></app-sidebar>
+<section class="main-container">
+    <div>
+        <!-- <ngx-loading [show]="routeLoading" [config]="{ backdropBorderRadius: '6px' }"></ngx-loading> -->
+        <router-outlet *ngIf="!routeLoading"></router-outlet>
+    </div>
+</section>

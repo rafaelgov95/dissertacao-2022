@@ -1,0 +1,10 @@
+docker run --rm -p 8501:8501 \
+    --mount type=bind,source=$(pwd),target=$(pwd) \
+    -e MODEL_BASE_PATH=/home/rafael/Documentos/Projetos/CNN/cnnwebv2 \
+    -e MODEL_NAME=vfc -t tensorflow/serving:latest
+    
+docker run --rm -p 8501:8501 \
+    --mount type=bind,source=$(pwd),target=$(pwd) \
+    -e MODEL_BASE_PATH=/home/rafael/Documentos/Projetos/CNN/cnnwebv2 \
+    -e MODEL_NAME=vfc -t tensorflow/serving:latest
+    

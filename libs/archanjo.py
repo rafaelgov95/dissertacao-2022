@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 from pandas import read_csv
 from scipy import signal
-from scipy.integrate import trapz
+# from scipy.integrate import trapz
 from scipy.ndimage import label
 from matplotlib import pyplot as plt
 from matplotlib.patches import Ellipse
@@ -18,9 +18,7 @@ from scipy import signal
 from scipy.ndimage import label
 from scipy.stats import zscore
 from scipy.interpolate import interp1d
-from scipy.integrate import trapz
 
-# misc
 import warnings
 import scipy.interpolate as interpolate
 import matplotlib as mpl
@@ -49,8 +47,7 @@ def coleta_dados(path_final):
     dirFiles= os.listdir(path_final)
     array=[]
     for file in dirFiles:
-        # print(type(file).encode())
-        array_original =np.loadtxt(path_final+"/"+file,dtype=np.int)
+        array_original =np.loadtxt(path_final+"/"+file,dtype=int)
 
         array.append((str(file),array_original))
     return np.array(array,dtype=object)
@@ -455,65 +452,65 @@ def timedomain(rr):
     return results
 
 
-def frequency_domain(rri, fs=4):
-    # Estimate the spectral density using Welch's method
-    fxx, pxx = signal.welch(x=rri, fs=fs)
-    '''
-    Segement found frequencies in the bands
-     - Very Low Frequency (VLF): 0-0.04Hz
-     - Low Frequency (LF): 0.04-0.15Hz
-     - High Frequency (HF): 0.15-0.4Hz
-    '''
-    cond_vlf = (fxx >= 0) & (fxx < 0.04)
-    cond_lf = (fxx >= 0.04) & (fxx < 0.15)
-    cond_hf = (fxx >= 0.15) & (fxx < 0.4)
-    # calculate power in each band by integrating the spectral density
-    vlf = trapz(pxx[cond_vlf], fxx[cond_vlf])
-    lf = trapz(pxx[cond_lf], fxx[cond_lf])
-    hf = trapz(pxx[cond_hf], fxx[cond_hf])
-    # sum these up to get total power
-    total_power = vlf + lf + hf
-    # find which frequency has the most power in each band
-    peak_vlf = fxx[cond_vlf][np.argmax(pxx[cond_vlf])]
-    peak_lf = fxx[cond_lf][np.argmax(pxx[cond_lf])]
-    peak_hf = fxx[cond_hf][np.argmax(pxx[cond_hf])]
-    # fraction of lf and hf
-    lf_nu = 100 * lf / (lf + hf)
-    hf_nu = 100 * hf / (lf + hf)
-    results = {}
-    # results['Power VLF (ms2)'] = vlf
-    # results['Power LF (ms2)'] = lf
-    # results['Power HF (ms2)'] = hf
-    # results['Power Total (ms2)'] = total_power
-    # results['LF HF'] = (lf / hf)
-    # results['Peak VLF (Hz)'] = peak_vlf
-    # results['Peak LF (Hz)'] = peak_lf
-    # results['Peak HF (Hz)'] = peak_hf
-    # results['Fraction LF (nu)'] = lf_nu
-    # results['Fraction HF (nu)'] = hf_nu
-
-    results['lf_nu'] = lf_nu
-    results['hf_nu'] = hf_nu
-    results['lf_hf'] = (lf / hf) * 10
-    results['vlf'] = vlf / 4
-    results['lf'] = lf / 4
-    results['hf'] = hf / 4
-    results['total_f'] = total_power / 10
-    results['peak_vlf'] = peak_vlf * 1000
-    results['peak_lf'] = peak_lf * 1000
-    results['peak_hf'] = peak_hf * 1000
-
-    # results['vlf'] = vlf
-    # results['lf'] = lf
-    # results['hf'] = hf
-    # results['total_f)'] = total_power
-    # results['lf_hf'] = (lf / hf)
-    # results['peak_vlf'] = peak_vlf*1000
-    # results['peak_lf'] = peak_lf*1000
-    # results['peak_hf'] = peak_hf*1000
-    # results['lf_nu'] = lf_nu
-    # results['hf_nu'] = hf_nu
-    return results, fxx, pxx
+# def frequency_domain(rri, fs=4):
+#     # Estimate the spectral density using Welch's method
+#     fxx, pxx = signal.welch(x=rri, fs=fs)
+#     '''
+#     Segement found frequencies in the bands
+#      - Very Low Frequency (VLF): 0-0.04Hz
+#      - Low Frequency (LF): 0.04-0.15Hz
+#      - High Frequency (HF): 0.15-0.4Hz
+#     '''
+#     cond_vlf = (fxx >= 0) & (fxx < 0.04)
+#     cond_lf = (fxx >= 0.04) & (fxx < 0.15)
+#     cond_hf = (fxx >= 0.15) & (fxx < 0.4)
+#     # calculate power in each band by integrating the spectral density
+#     vlf = trapz(pxx[cond_vlf], fxx[cond_vlf])
+#     lf = trapz(pxx[cond_lf], fxx[cond_lf])
+#     hf = trapz(pxx[cond_hf], fxx[cond_hf])
+#     # sum these up to get total power
+#     total_power = vlf + lf + hf
+#     # find which frequency has the most power in each band
+#     peak_vlf = fxx[cond_vlf][np.argmax(pxx[cond_vlf])]
+#     peak_lf = fxx[cond_lf][np.argmax(pxx[cond_lf])]
+#     peak_hf = fxx[cond_hf][np.argmax(pxx[cond_hf])]
+#     # fraction of lf and hf
+#     lf_nu = 100 * lf / (lf + hf)
+#     hf_nu = 100 * hf / (lf + hf)
+#     results = {}
+#     # results['Power VLF (ms2)'] = vlf
+#     # results['Power LF (ms2)'] = lf
+#     # results['Power HF (ms2)'] = hf
+#     # results['Power Total (ms2)'] = total_power
+#     # results['LF HF'] = (lf / hf)
+#     # results['Peak VLF (Hz)'] = peak_vlf
+#     # results['Peak LF (Hz)'] = peak_lf
+#     # results['Peak HF (Hz)'] = peak_hf
+#     # results['Fraction LF (nu)'] = lf_nu
+#     # results['Fraction HF (nu)'] = hf_nu
+#
+#     results['lf_nu'] = lf_nu
+#     results['hf_nu'] = hf_nu
+#     results['lf_hf'] = (lf / hf) * 10
+#     results['vlf'] = vlf / 4
+#     results['lf'] = lf / 4
+#     results['hf'] = hf / 4
+#     results['total_f'] = total_power / 10
+#     results['peak_vlf'] = peak_vlf * 1000
+#     results['peak_lf'] = peak_lf * 1000
+#     results['peak_hf'] = peak_hf * 1000
+#
+#     # results['vlf'] = vlf
+#     # results['lf'] = lf
+#     # results['hf'] = hf
+#     # results['total_f)'] = total_power
+#     # results['lf_hf'] = (lf / hf)
+#     # results['peak_vlf'] = peak_vlf*1000
+#     # results['peak_lf'] = peak_lf*1000
+#     # results['peak_hf'] = peak_hf*1000
+#     # results['lf_nu'] = lf_nu
+#     # results['hf_nu'] = hf_nu
+#     return results, fxx, pxx
 
 def passa_baixa(fft_x,fft_y,frequencia_corte):
     # print("X Size//0: ",fft_x.size//0," X: ",fft_x)

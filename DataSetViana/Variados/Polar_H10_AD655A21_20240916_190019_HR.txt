@@ -1,0 +1,4 @@
+Phone timestamp;HR [bpm];HRV [ms];Breathing interval [rpm];
+2024-09-16T19:00:21.242;125
+2024-09-16T19:00:22.258;125
+2024-09-16T19:00:23.249;124;1,3

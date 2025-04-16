@@ -47,8 +47,8 @@ def coleta_dados(path_final):
     dirFiles= os.listdir(path_final)
     array=[]
     for file in dirFiles:
+        print(path_final+"/"+file)
         array_original =np.loadtxt(path_final+"/"+file,dtype=int)
-
         array.append((str(file),array_original))
     return np.array(array,dtype=object)
 
@@ -369,36 +369,179 @@ def get_circular(array,value_list=8):
         array_temp.append(np.array(array_swap))
     return np.array(array_temp)
 
-# var=
+import numpy as np
 
 def select_estavel(data_set):
-    inicio=80
-    select_windows_value=8
-    tamanho=256
-    data_sets_final=[]
-    while inicio+tamanho <= len(data_set):
-        flag_stop=True
-        select_windows=0
-        media_ant=data_set[inicio]
-        while (flag_stop):
-            select_windows=select_windows+select_windows_value
-            select_data_swap = data_set[inicio:inicio+select_windows].copy()
-            deslocamento = 0.1 * media_ant
-            media = np.mean(select_data_swap)
-            deslocamento_direita = media_ant + deslocamento
-            deslocamento_esquerda = media_ant - deslocamento
-            if(select_windows >= tamanho):
-                flag_stop=False
-                data_sets_final.append((inicio,select_data_swap))
-            if  (media > deslocamento_esquerda) and ( deslocamento_direita > media) :
-                 # print("Media :",media)
-                 # print("deslocamento:",deslocamento_esquerda,deslocamento_direita)
-                 media_ant=np.mean(select_data_swap)
-            else:
-                flag_stop=False
-        inicio=select_windows+inicio
+    # Parâmetros
+    inicio = 80
+    select_windows_value = 9
+    tamanho = 256
+    data_sets_final = []
 
-    return np.array(data_sets_final,dtype=object)
+    # Loop principal para percorrer o dataset
+    while inicio + tamanho <= len(data_set):
+        flag_stop = True
+        select_windows = tamanho
+
+        # Inicializa média e desvio padrão anteriores
+        subset_inicial = data_set[inicio:inicio + tamanho]
+        media_ant = np.mean(subset_inicial)
+        desvio_ant = np.std(subset_inicial)
+
+        # Loop interno para verificar a estabilidade do subset
+        while flag_stop:
+            # Extrair o subconjunto atual
+            select_data_swap = data_set[inicio:inicio + select_windows]
+
+            # Calcula média e desvio padrão do subset atual
+            media_local = np.mean(select_data_swap)
+            desvio_local = np.std(select_data_swap)
+
+            # Calcula os deslocamentos para estabilidade
+            deslocamento_media = 0.1 * media_ant
+            deslocamento_desvio = 0.05 * desvio_ant
+
+            # Verifica se a média e o desvio padrão estão dentro de 10%
+            if (
+                abs(media_local - media_ant) <= deslocamento_media and
+                abs(desvio_local - desvio_ant) <= deslocamento_desvio
+            ):
+                # Atualiza os valores anteriores e expande a janela
+                media_ant = media_local
+                desvio_ant = desvio_local
+                select_windows += select_windows_value
+
+                # Garante que o tamanho máximo seja respeitado
+                if select_windows >= tamanho:
+                    flag_stop = False
+            else:
+                flag_stop = False
+
+        # Adiciona o subset atual ao resultado final
+        data_sets_final.append((inicio, data_set[inicio:inicio + tamanho]))
+
+        # Atualiza o início para o próximo subset
+        inicio += tamanho
+
+    return np.array(data_sets_final, dtype=object)
+
+#
+# def select_estavel(data_set):
+#     inicio=80
+#     select_windows_value=9
+#     tamanho=256
+#     data_sets_final=[]
+#     while inicio+tamanho <= len(data_set):
+#         flag_stop=True
+#         select_windows=0
+#         media_ant=data_set[inicio]
+#         while (flag_stop):
+#             select_windows=select_windows+select_windows_value
+#             select_data_swap = data_set[inicio:inicio+select_windows].copy()
+#             deslocamento = 0.1 * media_ant
+#             media = np.mean(select_data_swap)
+#             deslocamento_direita = media_ant + deslocamento
+#             deslocamento_esquerda = media_ant - deslocamento
+#             if(select_windows >= tamanho):
+#                 flag_stop=False
+#                 data_sets_final.append((inicio,select_data_swap))
+#             if  (media > deslocamento_esquerda) and ( deslocamento_direita > media) :
+#                  # print("Media :",media)
+#                  # print("deslocamento:",deslocamento_esquerda,deslocamento_direita)
+#                  media_ant=np.mean(select_data_swap)
+#             else:
+#                 flag_stop=False
+#         inicio=select_windows+inicio
+#
+#     return np.array(data_sets_final,dtype=object)
+
+import numpy as np
+
+# def select_estavel(data_set):
+#     inicio = 80
+#     select_windows_value = 9
+#     tamanho = 256
+#     data_sets_final = []
+#
+#     while inicio + tamanho <= len(data_set):
+#         select_windows = select_windows_value
+#         media_ant = np.mean(data_set[inicio:inicio + select_windows])
+#         flag_stop = True
+#
+#         while flag_stop:
+#             select_data_swap = data_set[inicio:inicio + select_windows]
+#             deslocamento = 0.1 * media_ant
+#             media = np.mean(select_data_swap)
+#             desvio_padrao = np.std(select_data_swap)
+#
+#             # Critérios de estabilidade
+#             condicao_media = (media_ant - deslocamento <= media <= media_ant + deslocamento)
+#             condicao_desvio = desvio_padrao <= 0.1 * media_ant  # Desvio padrão dentro de 5% da média anterior
+#
+#             if select_windows >= tamanho or not (condicao_media and condicao_desvio):
+#                 flag_stop = False
+#                 if select_windows >= tamanho:
+#                     data_sets_final.append((inicio, select_data_swap, desvio_padrao))
+#             else:
+#                 media_ant = media
+#                 select_windows += select_windows_value
+#
+#         inicio += select_windows_value  # Incremento fixo para evitar pular partes importantes
+#
+#     return np.array(data_sets_final, dtype=object)
+
+
+import numpy as np
+from scipy.stats import linregress
+
+
+def select_sinal_sem_tendencia(data_set, tamanho=256, inicio=80, select_windows_value=8, limite_tendencia=0.01,
+                               limite_variabilidade=0.05):
+    """
+    Seleciona janelas estáveis de sinais RR sem tendências claras.
+
+    Parâmetros:
+    - data_set: Lista ou array com os sinais RR.
+    - tamanho: Tamanho da janela final desejada.
+    - inicio: Ponto inicial para começar a análise.
+    - select_windows_value: Incremento em cada iteração.
+    - limite_tendencia: Máxima inclinação permitida para a regressão linear.
+    - limite_variabilidade: Máximo desvio padrão permitido como proporção da média.
+
+    Retorno:
+    - Lista de tuplas (índice inicial, subconjunto, desvio padrão, inclinação da tendência).
+    """
+    data_sets_final = []
+
+    while inicio + tamanho <= len(data_set):
+        select_windows = select_windows_value
+        flag_stop = True
+
+        while flag_stop:
+            select_data_swap = data_set[inicio:inicio + select_windows]
+
+            # Ajuste de regressão linear para detectar tendências
+            x = np.arange(len(select_data_swap))
+            slope, intercept, r_value, p_value, std_err = linregress(x, select_data_swap)
+
+            # Cálculo da média e desvio padrão
+            media = np.mean(select_data_swap)
+            desvio_padrao = np.std(select_data_swap)
+
+            # Critérios de estabilidade
+            condicao_tendencia = abs(slope) <= limite_tendencia
+            condicao_variabilidade = desvio_padrao <= limite_variabilidade * media
+
+            if select_windows >= tamanho or not (condicao_tendencia and condicao_variabilidade):
+                flag_stop = False
+                if select_windows >= tamanho and condicao_tendencia:
+                    data_sets_final.append((inicio, select_data_swap, desvio_padrao, slope))
+            else:
+                select_windows += select_windows_value
+
+        inicio += select_windows_value  # Incremento fixo para evitar pular partes importantes
+
+    return np.array(data_sets_final, dtype=object)
 
 
 def plot_poincare(rr,save_rr_poincare=None):
